@@ -69,7 +69,7 @@ jobs:
         run: sudo apt-get install -y doxygen
 
       - name: Generate Doxygen Documentation
-        run: doxygen Doxyfile
+        run: doxygen -g Doxyfile
 
       - name: Clone gh-pages branch
         run: git clone --branch gh-pages https://github.com/${{ github.repository }} gh-pages
