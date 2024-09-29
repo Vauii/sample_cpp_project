@@ -7,8 +7,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compile the program
-        run: g++ -o main main.cpp my_add.cpp
+      - name: Install CMake
+        run: sudo apt-get update && sudo apt-get install -y cmake
+
+      - name: Build the program
+        run: mkdir build && cmake -B build -S . && cmake --build build
 
       - name: Run the program
-        run: ./main 4 600
+        run: ./build/main 4 600
