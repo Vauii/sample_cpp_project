@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.14)
 project(sample_cpp_project)
 
-add_executable(main main.cpp my_add.cpp)
+include_directories(include)
+add_executable(main main.cpp src/my_add.cpp)
 
 set(gtest_force_shared_crt on)
 
@@ -12,7 +13,7 @@ FetchContent_Declare(googletest
 FetchContent_MakeAvailable(googletest)
 
 enable_testing()
-add_executable(tests test_add.cpp my_add.cpp)
+add_executable(tests test_add.cpp src/my_add.cpp)
 target_link_libraries(tests gtest_main)
 
 include(GoogleTest)
