@@ -76,6 +76,7 @@ jobs:
       - name: Checkout gh-pages branch
         run: |
           git fetch origin gh-pages
+          git stash || echo "No changes to stash"
           git checkout gh-pages
 
 
