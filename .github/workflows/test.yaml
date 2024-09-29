@@ -1,6 +1,7 @@
 name: build and run
 on: [push]
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
@@ -9,6 +10,9 @@ jobs:
 
       - name: Install CMake
         run: sudo apt-get update && sudo apt-get install -y cmake
+
+      - name: Install Doxygen
+        run: sudo apt-get install -y doxygen
 
       - name: Build the program
         run: mkdir build && cmake -B build -S . && cmake --build build
@@ -21,6 +25,7 @@ jobs:
             build/tests
             build/benchmarks
 
+
   tests:
     needs: [build]
     runs-on: ubuntu-latest
@@ -30,6 +35,7 @@ jobs:
         with:
           name: binaries
       - run: chmod +x tests && ./tests
+
 
   run:
     needs: [build]
@@ -41,6 +47,7 @@ jobs:
           name: binaries
       - run: chmod +x main && ./main 300 10000
 
+
   benchmark:
     needs: [build]
     runs-on: ubuntu-latest
@@ -50,3 +57,26 @@ jobs:
         with:
           name: binaries
       - run: chmod +x benchmarks && ./benchmarks
+
+  documentation:
+    needs: [build, tests, run]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Doxygen
+        run: sudo apt-get install -y doxygen
+
+      - name: Generate Doxygen Documentation
+        run: doxygen Doxyfile
+
+      - name: Clone gh-pages branch
+        run: git clone --branch gh-pages https://github.com/${{ github.repository }} gh-pages
+
+      - name: Deploy to GitHub Pages
+        run: |
+          rsync -av --delete docs/ gh-pages/
+          cd gh-pages
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Update documentation" || echo "No changes to commit"
+          git push
