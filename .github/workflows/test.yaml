@@ -1,0 +1,14 @@
+name: build and run
+on: [push]
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile the program
+        run: g++ -o main main.cpp my_add.cpp
+
+      - name: Run the program
+        run: ./main 4 600
