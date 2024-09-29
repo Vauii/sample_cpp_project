@@ -1,7 +1,7 @@
 name: build and run
 on: [push]
 jobs:
-  build-and-run:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,6 +21,7 @@ jobs:
             build/tests
 
   tests:
+    needs: [build]
     runs-on: ubuntu-latest
 
     steps:
@@ -30,6 +31,7 @@ jobs:
       - run: chmod +x tests && ./tests
 
   run:
+    needs: [build]
     runs-on: ubuntu-latest
 
     steps:
