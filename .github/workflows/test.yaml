@@ -65,11 +65,13 @@ jobs:
     needs: [build, tests, run]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      
       - name: Install Doxygen
         run: sudo apt-get install -y doxygen
 
       - name: Generate Doxygen Documentation
-        run: doxygen -g Doxyfile
+        run: doxygen Doxyfile
 
       - name: Clone gh-pages branch
         run: git clone --branch gh-pages https://github.com/${{ github.repository }} gh-pages
